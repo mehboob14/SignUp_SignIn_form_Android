@@ -20,7 +20,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     Button signup;
@@ -35,11 +37,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        DatabaseHandler db = new DatabaseHandler(this);
+        List<UserInfo> obj = new ArrayList<UserInfo>();
 
         signup = findViewById(R.id.signupBtn);
        email = findViewById(R.id.email);
@@ -56,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SignIn.class);
-                intent.putExtra("jsonArray", jsonArray.toString());
+               // intent.putExtra("jsonArray", jsonArray.toString());
+                intent.putExtra("obj",obj.toString());
                 startActivity(intent);
             }
         });
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
              @Override
              public void onClick(View view) {
                  Intent i = new Intent(getApplicationContext(), Welcome_page.class);
-                 i.putExtra("jsonArray", jsonArray.toString());
+                // i.putExtra("jsonArray", jsonArray.toString());
                  startActivity(i);
              }
          });
@@ -79,15 +79,11 @@ public class MainActivity extends AppCompatActivity {
 
                 boolean check = fieldsCheck();
                 if (check) {
-                    try {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("Username", userName);
-                        jsonObject.put("Email", userEmail);
-                        jsonObject.put("Password", userPassword);
-                        jsonArray.put(jsonObject);
-                    } catch (JSONException e) {
-                        Toast.makeText(getApplicationContext(), "Failed to create JSON", Toast.LENGTH_LONG).show();
-                    }
+
+                db.AddUser(new UserInfo(userEmail,userName,userPassword));
+                db.AddUser(new UserInfo("mehboob14@gmail.com","mehboob","boobhem@007"));
+
+
                    Toast.makeText(MainActivity.this, "Successfully signed up", Toast.LENGTH_SHORT).show();
                     //Intent i = new Intent(getApplicationContext(), authenticated.class);
                     //startActivity(i);
@@ -96,14 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        /*signupactivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-           public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),SignIn.class);
-                i.putExtra("jsonArray", jsonArray.toString());
-                startActivity(i);
-            }
-       });*/
+
     }
 
     public boolean fieldsCheck() {
@@ -141,8 +130,7 @@ public class MainActivity extends AppCompatActivity {
         for (char c : password.toCharArray()) {
             if (Character.isUpperCase(c)) {
                 isUpper = true;
-           // } //else if (Character.isDigit(c)) {
-               // isDigit = true;
+
             } else if (!Character.isLetterOrDigit(c)) {
                 isSpecial = true;
             }
