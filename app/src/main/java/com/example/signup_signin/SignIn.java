@@ -1,6 +1,7 @@
 package com.example.signup_signin;
 
 import android.content.Intent;
+import android.hardware.usb.UsbRequest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class SignIn extends AppCompatActivity {
       Button signInBtn;
       EditText useremail;
@@ -28,42 +31,40 @@ public class SignIn extends AppCompatActivity {
       boolean validuser = false;
       JSONArray jsonArray = new JSONArray();
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_in);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        DatabaseHandler db = new DatabaseHandler(this);
+
+
         useremail = findViewById(R.id.email);
         userpassword = findViewById(R.id.password);
         signInBtn = findViewById(R.id.signInBtn);
         forgotpass = findViewById(R.id.forgotPassword);
         singUp = findViewById(R.id.SignUp);
 
+      //  db.getuser(useremail,userpassword);
         Intent intent = getIntent();
-        String jsonStringArry = intent.getStringExtra("jsonArray");
-        try {
-         jsonArray = new JSONArray(jsonStringArry);
-        }catch(Exception e){
-            //
-        }
+        String obj = intent.getStringExtra("obj");
+
 
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String enterdemail = useremail.getText().toString();
                 String enterdpassword = userpassword.getText().toString();
-                validuser = validDateUser(enterdemail,enterdpassword);
-                if(validuser){
-                    Toast.makeText(getApplicationContext(), "Successfully Sign In", Toast.LENGTH_SHORT).show();
-                //    Intent i = new Intent(getApplicationContext(), authenticated.class);
-                  //  startActivity(i);
-                }else {
-                    Toast.makeText(getApplicationContext(), "Invalid email or password", Toast.LENGTH_SHORT).show();
-                }
+               List<UserInfo> users = db.getAllUsers();
+               //Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_SHORT).show();
+         for(UserInfo usr :users){
+             if(usr.getEmail().equals(enterdemail)){
+                 Toast.makeText(getApplicationContext(), "Successfully Sign In", Toast.LENGTH_SHORT).show();
+
+             }else {
+                 Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_SHORT).show();
+             }
+         }
             }
         });
 forgotpass.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +86,7 @@ singUp.setOnClickListener(new View.OnClickListener() {
 });
     }
     public boolean validDateUser(String usermail,String userpassword){
-     for(int i = 0;i<jsonArray.length();i++){
+     /*for(int i = 0;i<jsonArray.length();i++){
          try {
              JSONObject user = jsonArray.getJSONObject(i);
              if(user.getString("Email").equals(usermail) && user.getString("Password").equals(userpassword)){
@@ -94,7 +95,9 @@ singUp.setOnClickListener(new View.OnClickListener() {
          }catch(JSONException E){
             //
          }
-     }
+     } */
+
+
      return false;
     }
 }
