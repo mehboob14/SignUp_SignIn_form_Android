@@ -20,18 +20,25 @@ public class forgot_password extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_forgot_password);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        DatabaseHandler db;
         email = findViewById(R.id.email);
         findaccount = findViewById(R.id.findaccount);
+        db = new DatabaseHandler(this);
 
         findaccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(forgot_password.this, "Account does't exits", Toast.LENGTH_SHORT).show();
+                String enterdEmial = email.getText().toString().trim();
+                if(enterdEmial == null){
+                    return;
+                }
+                UserInfo user = db.getuser(enterdEmial);
+                if(user.getEmail().equals(enterdEmial)){
+                    Toast.makeText(forgot_password.this, "Account Recoverd", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(forgot_password.this, "Account Not found", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

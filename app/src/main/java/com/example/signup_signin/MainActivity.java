@@ -84,14 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 db.AddUser(new UserInfo("mehboob14@gmail.com","mehboob","boobhem@007"));
 
 
-
-                        //JSONObject jsonObject = new JSONObject();
-                        //jsonObject.put("Username", userName);
-                       // jsonObject.put("Email", userEmail);
-                       // jsonObject.put("Password", userPassword);
-                       /// jsonArray.put(jsonObject);
-
-
                    Toast.makeText(MainActivity.this, "Successfully signed up", Toast.LENGTH_SHORT).show();
                     //Intent i = new Intent(getApplicationContext(), authenticated.class);
                     //startActivity(i);
@@ -100,14 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-       /* signupactivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-           public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),SignIn.class);
-                i.putExtra("jsonArray", jsonArray.toString());
-                startActivity(i);
-            }
-       });*/
+
     }
 
     public boolean fieldsCheck() {
@@ -145,8 +130,7 @@ public class MainActivity extends AppCompatActivity {
         for (char c : password.toCharArray()) {
             if (Character.isUpperCase(c)) {
                 isUpper = true;
-           // } //else if (Character.isDigit(c)) {
-               // isDigit = true;
+
             } else if (!Character.isLetterOrDigit(c)) {
                 isSpecial = true;
             }
