@@ -13,7 +13,7 @@ import java.util.List;
 
     public class DatabaseHandler extends SQLiteOpenHelper {
         private static final int DATABASE_VERSION = 1;
-        private static final String DATABASE_NAME = "SignUp-Form";
+        private static final String DATABASE_NAME = "SignUp";
         private static final String TABLE_CONTACTS = "SIGNIN";
         private static final String KEY_EMAIL = "Email";
         private static final String KEY_USERNAME = "Username";
@@ -26,7 +26,7 @@ import java.util.List;
         @Override
         public void onCreate(SQLiteDatabase db) {
             String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
-                    + KEY_EMAIL + " TEXT PRIMARY KEY," // Change INTEGER to TEXT
+                    + KEY_EMAIL + " TEXT PRIMARY KEY,"
                     + KEY_USERNAME + " TEXT,"
                     + KEY_PASSWORD + " TEXT" + ")";
             db.execSQL(CREATE_CONTACTS_TABLE);
